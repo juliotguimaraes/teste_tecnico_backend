@@ -4,5 +4,6 @@ from . import views
 
 urlpatterns = [
     url(r'^core/$', views.compra, name='core'),
-    url(r'^listar-compras/(?P<pkCompra>[0-9]+)/(?P<pk>[0-9]+)/$', views.listarCompras, name='listar-compras')
+    #url(r'^listar-compras/(?P<pkCompra>[0-9]+)/(?P<pk>[0-9]+)/$', views.listarCompras, name='listar-compras')
+    url(r'^listar-compras/$', views.listarCompras, name='listar-compras')
 ]
