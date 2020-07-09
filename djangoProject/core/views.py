@@ -4,6 +4,7 @@ from django.views import View
 from django.shortcuts import get_object_or_404, redirect
 from .models import Compra
 from .forms import CompraForm
+from django.template.loader import get_template, render_to_string
 #from openpyxl import Workbook
 from django.http import HttpResponse
 #import xlwt
@@ -13,10 +14,11 @@ from django.http import HttpResponse
 def compra(request):
     template_name = 'compra/compra.html'
     context = {}
-    #proInfa_list = ProInfa.objects.all()
-    #proInfaSelecionado = None
-    #context['proInfa_list'] = proInfa_list
-    #context['proInfaSelecionado'] = proInfaSelecionado
+    compra_list = Compra.objects.all()
+    CompraSelecionado = None
+    print(*compra_list, sep="\n")
+    context['CompraSelecionado'] = CompraSelecionado
+    context['compra_list'] = compra_list
     return render(request, template_name, context)
 
 def listarCompras(request, pkCompra, pk):
