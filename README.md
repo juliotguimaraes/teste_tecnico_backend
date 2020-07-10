@@ -12,3 +12,13 @@ A ferramenta de banco de dados fica a sua escolha, **MySQL, Postgres, Mongo, etc
 
 Ao finalizar o projeto, nos envie pelo github de uma forma organizada e documentada, para que possamos executar sua API na nossa máquina local.  
 Explique dentro da documentação o porque usou o banco de dados e a modelagem escolhida.
+
+__________________________________________________________________________________________________________________________________________
+
+Esse trabalho foi desenvolvido utilizando Django 3.0.8
+Utilizei rest framework para construir a API e as requisições de POST e get.
+Criando os response e renderização.
+
+Foi criado o Models Compra com os campos que julguei necessários para cumprir a tarefa.
+
+Além disso, foi criado um banco de dados postgreSQL, utilizando o module django psycopg2
