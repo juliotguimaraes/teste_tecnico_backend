@@ -11,10 +11,23 @@ from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.mixins import (
+    CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
+)
+from rest_framework.viewsets import GenericViewSet
 
 #import xlwt
 
 # Create your views here.
+
+class CompraViewSet(GenericViewSet,  # generic view functionality
+                     CreateModelMixin,  # handles POSTs
+                     RetrieveModelMixin,  # handles GETs for 1 Company
+                     UpdateModelMixin,  # handles PUTs and PATCHes
+                     ListModelMixin):  # handles GETs for many Companies
+
+      serializer_class = CompraSerializer
+      queryset = Compra.objects.all()
 
 def compra(request):
     template_name = 'compra/compra.html'
@@ -26,19 +39,41 @@ def compra(request):
     context['compra_list'] = compra_list
     return render(request, template_name, context)
 
-def listarCompras(request):
+def listarCompras(request, pkCompra, pkdia, pkmes, pkano, pkdiaf, pkmesf, pkanof):
     template_name = 'compra/listaCompras.html'
     context = {}
-    serializer = CompraSerializer(date=request.date)
+    compra_list = Compra.objects.filter(product_id=pkCompra)
 
-    print(serializer)
+
+    #compras_selecionadas = compra_list.filter(product_id=pkCompra)
+    dataini = str(pkano) + "-" + str(pkmes) + "-" + str(pkdia)
+    datafim = str(pkanof) + "-" + str(pkmesf) + "-" + str(pkdiaf)
+
+    lista_fim = compra_list.filter(date__range=[dataini,datafim])
+
+    valorFinal = 0.0
+    for compra in lista_fim:
+        valorFinal += float(compra.total_value)
+
+    print(compra_list[0])
+    print("\n")
+    print(valorFinal)
+
+    return render(request, template_name, context)
+
+def listarCompras2(request):
+    template_name = 'compra/listaCompras.html'
+    context = {}
+
+    #print(request)
+
+    return render(request, template_name, context)
+
+
     #compra = Compra.objects.get(product_id=pkCompra)
 
 
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     #pisazonalizacaoSelecionada = PISazonalizacao()
     #proInfa = ProInfa.objects.get(pk=pkProInfa)
     #pisazonalizacao_list = PISazonalizacao.objects.filter(proInfa__id=proInfa.id)

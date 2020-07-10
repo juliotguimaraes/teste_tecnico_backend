@@ -18,8 +18,8 @@ class Compra(models.Model):
     value = models.DecimalField(_('Valor (R$)'), null=True, blank=True, max_digits=20, decimal_places=2, default=Decimal('0.00'))
 
     def __str__(self):
-        return str(self.date)
-    class Meta:
-        verbose_name = 'Compra'
-        verbose_name_plural = 'Compras'
-        ordering = ['product']
+        return  '%s %s' % (self.product_id, self.product)
+    # class Meta:
+    #     verbose_name = 'Compra'
+    #     verbose_name_plural = 'Compras'
+    #     ordering = ['product']
