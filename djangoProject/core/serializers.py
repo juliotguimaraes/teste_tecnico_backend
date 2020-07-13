@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from .models import Compra
+from .models import Compra, TotalVendido
 
 class CompraSerializer(ModelSerializer):
     date = serializers.DateField()
@@ -16,4 +16,14 @@ class CompraSerializer(ModelSerializer):
         model = Compra
         fields = (
             'date', 'discount', 'manufacturer_id', 'product', 'product_id', 'quantity', 'store_id', 'total_value', 'value'
+        )
+
+class TotalVendidoSerializer(ModelSerializer):
+    date = serializers.DateField()
+    product_id = serializers.IntegerField()
+    total_value = serializers.DecimalField(max_digits=20, decimal_places=2)
+    class Meta:
+        model = TotalVendido
+        fields = (
+            'date', 'product_id', 'total_value'
         )

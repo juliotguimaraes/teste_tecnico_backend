@@ -23,3 +23,10 @@ class Compra(models.Model):
     #     verbose_name = 'Compra'
     #     verbose_name_plural = 'Compras'
     #     ordering = ['product']
+
+class TotalVendido(models.Model):
+    date = models.DateField(_('Data'),null=True, blank=True)
+    product_id = models.IntegerField(_('Produto ID'), validators=[MinValueValidator(0000000000), MaxValueValidator(9999999999)])
+    total_value = models.DecimalField(_('Valor Total do dia desse produto(R$)'), null=True, blank=True, max_digits=20, decimal_places=2, default=Decimal('0.00'))
+    def __str__(self):
+        return  '%s %s' % (self.product_id, str(self.total_value))
