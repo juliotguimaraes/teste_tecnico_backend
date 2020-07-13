@@ -79,16 +79,21 @@ def listarCompras(request):
     HttpResponse("Got json data")
     lista_fim = []
     valorFinal = 0.0
+    form = TotalVendidoForm(request.POST)
     for product in products:
         compra_list = Compra.objects.filter(product_id=product)
         lista_fim = compra_list.filter(date__range=[date_ini,date_fim])
-
         for compra in lista_fim:
+            dateini = compra.date
             valorFinal += float(compra.total_value)
-            print(valorFinal)
-            lista_fim = []
+            if compra.date > dateini:
+              context['ValorFinal'] = valorFinal
+              endpoint = form.save(commit=False)
+              if endpoint.is_valid():
+                endpoint.date = compra.date
+                endpoint.product_id = compra.product_id
+                endpoint.total_value = valorFinal
+                endpoint.save()
+              lista_fim = []
 
-    context['values'] = valorFinal
-    #print(request)
-    #compra = Compra.objects.get(product_id=pkCompra)
     return render(request, template_name, context)
