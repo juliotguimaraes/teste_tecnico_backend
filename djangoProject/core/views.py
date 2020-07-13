@@ -8,7 +8,6 @@ from .models import Compra, TotalVendido
 from .forms import CompraForm, TotalVendidoForm
 from .serializers import CompraSerializer, TotalVendidoSerializer
 from django.template.loader import get_template, render_to_string
-#from openpyxl import Workbook
 from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -18,9 +17,6 @@ from rest_framework.mixins import (
 )
 from rest_framework.viewsets import GenericViewSet
 
-#import xlwt
-
-# Create your views here.
 
 class CompraViewSet(GenericViewSet,  # generic view functionality
                      CreateModelMixin,  # handles POSTs
@@ -41,28 +37,6 @@ def compra(request):
     context['compra_list'] = compra_list
     return render(request, template_name, context)
 
-#def listarCompras(request, pkCompra, pkdia, pkmes, pkano, pkdiaf, pkmesf, pkanof):
-#    template_name = 'compra/listaCompras.html'
-#    context = {}
-#    compra_list = Compra.objects.filter(product_id=pkCompra)
-#
-#
-#    #compras_selecionadas = compra_list.filter(product_id=pkCompra)
-#    dataini = str(pkano) + "-" + str(pkmes) + "-" + str(pkdia)
-#    datafim = str(pkanof) + "-" + str(pkmesf) + "-" + str(pkdiaf)
-#
-#    lista_fim = compra_list.filter(date__range=[dataini,datafim])
-#
-#    valorFinal = 0.0
-#    for compra in lista_fim:
-#        valorFinal += float(compra.total_value)
-#
-#    print(compra_list[0])
-#    print("\n")
-#    print(valorFinal)
-#
-#    return render(request, template_name, context)
-#
 ###ListarCompras2 É a função response para POST, products é a lista de ids de produtos que será incluso na soma.
 @csrf_exempt
 def listarCompras(request):
@@ -80,13 +54,14 @@ def listarCompras(request):
     lista_fim = []
     valorFinal = 0.0
     form = TotalVendidoForm(request.POST)
-    for product in products:
+    for product in products: #filtra entre os ids requisitados
         compra_list = Compra.objects.filter(product_id=product)
         lista_fim = compra_list.filter(date__range=[date_ini,date_fim])
-        for compra in lista_fim:
+        for compra in lista_fim: #loop de todas as compras no date range
             dateini = compra.date
             valorFinal += float(compra.total_value)
-            if compra.date > dateini:
+            if compra.date > dateini: #valida para recomeçar a cada dia do laço
+              dateini = compra.date
               context['ValorFinal'] = valorFinal
               endpoint = form.save(commit=False)
               if endpoint.is_valid():

@@ -16,13 +16,8 @@ class Compra(models.Model):
     store_id = models.CharField(_('Produto'), max_length=20, default='')
     total_value = models.DecimalField(_('Valor Total (R$)'), null=True, blank=True, max_digits=20, decimal_places=2, default=Decimal('0.00'))
     value = models.DecimalField(_('Valor (R$)'), null=True, blank=True, max_digits=20, decimal_places=2, default=Decimal('0.00'))
-
     def __str__(self):
         return  '%s %s' % (self.product_id, self.date)
-    # class Meta:
-    #     verbose_name = 'Compra'
-    #     verbose_name_plural = 'Compras'
-    #     ordering = ['product']
 
 class TotalVendido(models.Model):
     date = models.DateField(_('Data'),null=True, blank=True)
